@@ -1,30 +1,23 @@
 """
-    - Dynamixel Constants
-    Author: Othman Turki
-    Date: 2022/11/01
+YOKOBO CONSTANTS
 """
 
-# Control table address
-ADDR_MX_TORQUE_ENABLE = 64
-ADDR_MX_GOAL_POSITION = 116
-ADDR_MX_PRESENT_POSITION = 132
-ADDR_PRO_GOAL_VEL = 104
-ADDR_PRO_PRESENT_VEL = 128
-ADDR_PRO_OPERATING_MODE = 11
-
-# Protocol version
+DEVICENAME = "COM13"  # Windows: "COM*", Linux: "/dev/ttyUSB*"
 PROTOCOL_VERSION = 2.0
-
-# Default settings
-DXL1_ID = 11  # base motor
-DXL2_ID = 12  # mid motor
-DXL3_ID = 13  # top motor
-
 BAUDRATE = 57600
-DEVICENAME = 'COM13'  # '/dev/ttyUSB0'
 
-TORQUE_ENABLE = 1  # Value for enabling the torque
-TORQUE_DISABLE = 0  # Value for disabling the torque
+ADDR_TORQUE = 64
+ADDR_PROFILE_ACCELERATION = 108
+ADDR_PROFILE_VELOCITY = 112
+ADDR_GOAL_POSITION = 116
+ADDR_PRESENT_POSITION = 132
+
+DXL1_ID = 11
+DXL2_ID = 12
+DXL3_ID = 13
+TORQUE_ENABLE = 1
+TORQUE_DISABLE = 0
+SECONDS_DELAY = 1
 
 # MOTOR LIMITS
 MOTOR_1_CENTER = 2015  # base motor

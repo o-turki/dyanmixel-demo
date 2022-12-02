@@ -74,7 +74,6 @@ else:
     getch()
     quit()
 
-
 # Set port baudrate
 if portHandler.setBaudRate(BAUDRATE):
     print("Succeeded to change the baudrate")
