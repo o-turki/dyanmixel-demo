@@ -3,11 +3,12 @@ Yokobo Animations
 """
 
 import time
-import math
-from functools import partial
 from dynamixel_sdk import *
 
 import constants_definition_yokobo as cst
+
+timing = []
+rotation = []
 
 
 def intrusion(cycles_number, duration):
@@ -33,48 +34,69 @@ def intrusion(cycles_number, duration):
 
     # Enable Dynamixel Torque
     toggle_torque(portHandler, packetHandler, cst.DXL1_ID, cst.TORQUE_ENABLE)
-    toggle_torque(portHandler, packetHandler, cst.DXL2_ID, cst.TORQUE_ENABLE)
+    # toggle_torque(portHandler, packetHandler, cst.DXL2_ID, cst.TORQUE_ENABLE)
 
     # Set profile accereration and velocity (Bigger value for smoother motion)
     set_acceleration_and_velocity(
         portHandler, packetHandler, cst.DXL1_ID, 1000)
-    set_acceleration_and_velocity(
-        portHandler, packetHandler, cst.DXL2_ID, 1000)
+    # set_acceleration_and_velocity(
+    #     portHandler, packetHandler, cst.DXL2_ID, 1000)
 
     # ================================================================================
     # ANIMATION <START>
     # ================================================================================
+    start = time.time()
+
+    end = time.time()
+    timing.append(round(end - start, 1))
+    read_motor(portHandler, packetHandler, cst.DXL1_ID, cst.MOTOR_1_CENTER)
 
     write_motor(portHandler, packetHandler,
                 cst.DXL1_ID, cst.MOTOR_1_CENTER, duration)
 
-    write_motor(portHandler, packetHandler,
-                cst.DXL2_ID, cst.MOTOR_2_CENTER, duration)
+    end = time.time()
+    timing.append(round(end - start, 1))
+    read_motor(portHandler, packetHandler, cst.DXL1_ID, cst.MOTOR_1_CENTER)
 
-    for _ in range(math.ceil(cycles_number / 2)):
-        write_motor(portHandler, packetHandler,
-                    cst.DXL2_ID, cst.MOTOR_2_MIN_LIM, duration)
-        write_motor(portHandler, packetHandler,
-                    cst.DXL2_ID, cst.MOTOR_2_MAX_LIM, duration)
+    # write_motor(portHandler, packetHandler,
+    #             cst.DXL2_ID, cst.MOTOR_2_CENTER, duration)
+    # for _ in range(math.ceil(cycles_number / 2)):
+    #     write_motor(portHandler, packetHandler,
+    #                 cst.DXL2_ID, cst.MOTOR_2_MIN_LIM, duration)
+    #     write_motor(portHandler, packetHandler,
+    #                 cst.DXL2_ID, cst.MOTOR_2_MAX_LIM, duration)
 
     for _ in range(cycles_number):
         write_motor(portHandler, packetHandler,
                     cst.DXL1_ID, cst.MOTOR_1_MIN_LIM, duration)
+
+        end = time.time()
+        timing.append(round(end - start, 1))
+        read_motor(portHandler, packetHandler, cst.DXL1_ID, cst.MOTOR_1_CENTER)
+
         write_motor(portHandler, packetHandler,
                     cst.DXL1_ID, cst.MOTOR_1_MAX_LIM, duration)
+
+        end = time.time()
+        timing.append(round(end - start, 1))
+        read_motor(portHandler, packetHandler, cst.DXL1_ID, cst.MOTOR_1_CENTER)
 
     # BACK TO CENTER
     write_motor(portHandler, packetHandler,
                 cst.DXL1_ID, cst.MOTOR_1_CENTER, duration)
-    write_motor(portHandler, packetHandler,
-                cst.DXL2_ID, cst.MOTOR_2_CENTER, duration)
+    # write_motor(portHandler, packetHandler,
+    #             cst.DXL2_ID, cst.MOTOR_2_CENTER, duration)
+
+    end = time.time()
+    timing.append(round(end - start, 1))
+    read_motor(portHandler, packetHandler, cst.DXL1_ID, cst.MOTOR_1_CENTER)
     # ================================================================================
     # ANIMATION <END>
     # ================================================================================
 
     # Disable Dynamixel Torque
     toggle_torque(portHandler, packetHandler, cst.DXL1_ID, cst.TORQUE_DISABLE)
-    toggle_torque(portHandler, packetHandler, cst.DXL2_ID, cst.TORQUE_DISABLE)
+    # toggle_torque(portHandler, packetHandler, cst.DXL2_ID, cst.TORQUE_DISABLE)
 
     portHandler.closePort()
 
@@ -114,7 +136,7 @@ def set_acceleration_and_velocity(port_handler, packet_handler, dxl_id, speed):
 
 
 def write_motor(port_handler, packet_handler, dxl_id, goal_position, duration):
-    """ Write to Dynamixel motor function """
+    """ Write to Dynamixel """
 
     limits = {
         cst.DXL1_ID: {
@@ -144,9 +166,27 @@ def write_motor(port_handler, packet_handler, dxl_id, goal_position, duration):
     time.sleep(duration)
 
 
-animations = {
-    "Intrusion": partial(intrusion, 3, cst.SECONDS_DELAY)
-}
+def read_motor(port_handler, packet_handler, dxl_id, center):
+    """ Read from Dynamixel """
 
-# intrusion = animations["Intrusion"]
-# intrusion()
+    dxl_present_position, dxl_comm_result, dxl_error = packet_handler.read4ByteTxRx(
+        port_handler, dxl_id, cst.ADDR_PRESENT_POSITION)
+    if dxl_comm_result != COMM_SUCCESS:
+        print("%s" % packet_handler.getTxRxResult(dxl_comm_result))
+    elif dxl_error != 0:
+        print("%s" % packet_handler.getRxPacketError(dxl_error))
+
+    # print(round(dxl_present_position - center, -1))
+    # print(round((dxl_present_position - center) / 4096 * 360))
+    rotation.append(round((dxl_present_position - center) / 4096 * 360))
+
+
+# start = time.time()
+intrusion(3, cst.SECONDS_DELAY)
+# end = time.time()
+# print(end - start)
+print(timing)
+print(rotation)
+
+# [0.0, 1.0, 2.1, 3.1, 4.2, 5.2, 6.2, 7.3, 8.3]
+# [0, 0, -52, 52, -52, 52, -52, 52, 0]
