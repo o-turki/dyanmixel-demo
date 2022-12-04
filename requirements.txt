@@ -14,3 +14,4 @@ pyserial==3.5
 tomli==2.0.1
 tomlkit==0.11.6
 wrapt==1.14.1
+XlsxWriter==3.0.3

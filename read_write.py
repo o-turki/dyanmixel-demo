@@ -11,20 +11,20 @@ if os.name == 'nt':  # Windows
 
     def getch():
         return msvcrt.getch().decode()
-else:  # Linux
-    import sys
-    import tty
-    import termios
-    fd = sys.stdin.fileno()
-    old_settings = termios.tcgetattr(fd)
+# else:  # Linux
+#     import sys
+#     import tty
+#     import termios
+#     fd = sys.stdin.fileno()
+#     old_settings = termios.tcgetattr(fd)
 
-    def getch():
-        try:
-            tty.setraw(sys.stdin.fileno())
-            ch = sys.stdin.read(1)
-        finally:
-            termios.tcsetattr(fd, termios.TCSADRAIN, old_settings)
-        return ch
+#     def getch():
+#         try:
+#             tty.setraw(sys.stdin.fileno())
+#             ch = sys.stdin.read(1)
+#         finally:
+#             termios.tcsetattr(fd, termios.TCSADRAIN, old_settings)
+#         return ch
 
 from dynamixel_sdk import *  # Uses Dynamixel SDK library
 
