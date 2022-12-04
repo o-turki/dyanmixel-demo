@@ -6,9 +6,10 @@ import time
 from dynamixel_sdk import *
 
 import constants_definition_yokobo as cst
+from animation_logger import animation_logger
 
 timing = []
-rotation = []
+rotations = []
 
 
 def intrusion(cycles_number, duration):
@@ -178,15 +179,16 @@ def read_motor(port_handler, packet_handler, dxl_id, center):
 
     # print(round(dxl_present_position - center, -1))
     # print(round((dxl_present_position - center) / 4096 * 360))
-    rotation.append(round((dxl_present_position - center) / 4096 * 360))
+    rotations.append(round((dxl_present_position - center) / 4096 * 360))
 
 
 # start = time.time()
-intrusion(3, cst.SECONDS_DELAY)
+# intrusion(3, cst.SECONDS_DELAY)
 # end = time.time()
 # print(end - start)
-print(timing)
-print(rotation)
+# print(timing)
+# print(rotation)
 
-# [0.0, 1.0, 2.1, 3.1, 4.2, 5.2, 6.2, 7.3, 8.3]
-# [0, 0, -52, 52, -52, 52, -52, 52, 0]
+timing = [0.0, 1.0, 2.1, 3.1, 4.2, 5.2, 6.2, 7.3, 8.3]
+rotations = [0, 0, -52, 52, -52, 52, -52, 52, 0]
+animation_logger("Intrusion", "M1", timing, rotations, 0, 0)
