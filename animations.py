@@ -182,13 +182,10 @@ def read_motor(port_handler, packet_handler, dxl_id, center):
     rotations.append(round((dxl_present_position - center) / 4096 * 360))
 
 
-# start = time.time()
-# intrusion(3, cst.SECONDS_DELAY)
-# end = time.time()
-# print(end - start)
+intrusion(3, cst.SECONDS_DELAY)
 # print(timing)
-# print(rotation)
+# print(rotations)
 
-timing = [0.0, 1.0, 2.1, 3.1, 4.2, 5.2, 6.2, 7.3, 8.3]
-rotations = [0, 0, -52, 52, -52, 52, -52, 52, 0]
+# timing = [0.0, 1.0, 2.1, 3.1, 4.2, 5.2, 6.2, 7.3, 8.3]
+# rotations = [0, 0, -52, 52, -52, 52, -52, 52, 0]
 animation_logger("Intrusion", "M1", timing, rotations, 0, 0)

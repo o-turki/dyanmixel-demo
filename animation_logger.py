@@ -47,8 +47,8 @@ def animation_logger(name, motor, a_timing, a_rotations, row, col):
     workbook.close()
 
 
-timing = [0.0, 1.0, 2.1, 3.1, 4.2, 5.2, 6.2, 7.3, 8.3]
-rotations = [0, 0, -52, 52, -52, 52, -52, 52, 0]
+# timing = [0.0, 1.0, 2.1, 3.1, 4.2, 5.2, 6.2, 7.3, 8.3]
+# rotations = [0, 0, -52, 52, -52, 52, -52, 52, 0]
 
 # Function Call
 # animation_logger("Intrusion", "M1", timing, rotations, 0, 0)
