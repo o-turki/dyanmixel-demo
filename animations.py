@@ -15,6 +15,11 @@ rotations = []
 def intrusion(cycles_number, duration):
     """ Movements of the Yokobo in case of intrusion """
 
+    global timing
+    global rotations
+    timing = []
+    rotations = []
+
     portHandler = PortHandler(cst.DEVICENAME)
     packetHandler = PacketHandler(cst.PROTOCOL_VERSION)
 
@@ -182,10 +187,19 @@ def read_motor(port_handler, packet_handler, dxl_id, center):
     rotations.append(round((dxl_present_position - center) / 4096 * 360))
 
 
-intrusion(3, cst.SECONDS_DELAY)
+# intrusion(3, cst.SECONDS_DELAY)
 # print(timing)
 # print(rotations)
 
 # timing = [0.0, 1.0, 2.1, 3.1, 4.2, 5.2, 6.2, 7.3, 8.3]
 # rotations = [0, 0, -52, 52, -52, 52, -52, 52, 0]
-animation_logger("Intrusion", "M1", timing, rotations, 0, 0)
+# animation_logger("Intrusion", "M1", timing, rotations, 0, 0)
+
+def animate_intrusion():
+    """ Animation and Log to Excel File """
+
+    intrusion(3, cst.SECONDS_DELAY)
+    animation_logger("Intrusion", "M1", timing, rotations, 0, 0)
+
+
+animate_intrusion()
